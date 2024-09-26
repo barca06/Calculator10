@@ -8,35 +8,37 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите пример (например, 5 + 3 или I * V):");
-        String input = scanner.nextLine().trim();
+        while (true) { // Бесконечный цикл для повторения запроса на ввод
+            System.out.println("Введите пример (например, 5 + 3 или I * V):");
+            String input = scanner.nextLine().trim();
 
-        if (!input.matches("^\\w+\\s*[+\\-*/]\\s*\\w+$")) {
-            System.out.println("Формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)");
-            return;
+            if (!input.matches("^\\w+\\s*[+\\-*/]\\s*\\w+$")) {
+                System.out.println("Формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *)");
+                break; // Завершаем программу при ошибке
+            }
+
+            array = input.split("\\s+");
+
+            boolean isLeftRoman = isRoman(array[0]);
+            boolean isRightRoman = isRoman(array[2]);
+
+            if (isLeftRoman != isRightRoman) {
+                System.out.println("Нельзя использовать одновременно разные системы счисления");
+                break; // Завершаем программу при ошибке
+            }
+
+            leftit = isLeftRoman ? romanToArabic(array[0]) : Integer.parseInt(array[0]);
+            rightit = isRightRoman ? romanToArabic(array[2]) : Integer.parseInt(array[2]);
+
+            if (leftit <= 0 || leftit > 10 || rightit <= 0 || rightit > 10) {
+                System.out.println("Числа должны быть от 1 до 10");
+                break; // Завершаем программу при ошибке
+            }
+
+            op = array[1];
+            String result = calc();
+            System.out.println(result);
         }
-
-        array = input.split("\\s+");
-
-        boolean isLeftRoman = isRoman(array[0]);
-        boolean isRightRoman = isRoman(array[2]);
-
-        if (isLeftRoman != isRightRoman) {
-            System.out.println("Нельзя использовать одновременно разные системы счисления");
-            return;
-        }
-
-        leftit = isLeftRoman ? romanToArabic(array[0]) : Integer.parseInt(array[0]);
-        rightit = isRightRoman ? romanToArabic(array[2]) : Integer.parseInt(array[2]);
-
-        if (leftit <= 0 || leftit > 10 || rightit <= 0 || rightit > 10) {
-            System.out.println("Числа должны быть от 1 до 10");
-            return;
-        }
-
-        op = array[1];
-        String result = calc();
-        System.out.println(result);
     }
 
     static String calc() {
@@ -100,4 +102,4 @@ public class Main {
 
         return roman.toString();
     }
-} 
+}
